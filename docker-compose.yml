@@ -1,0 +1,32 @@
+version: '3.7'
+services:
+  ms-eureka:
+    container_name: ms-eureka
+    build: ./ms-eureka
+    ports:
+      - 8761:8761
+    working_dir: /app
+    networks:
+      - ms_sistci
+
+  db_sistci:
+    container_name: db_sistci
+    image: postgres
+    environment:
+      - POSTGRES_DB=db_sistci
+      - POSTGRES_USER=SISTCI
+      - POSTGRES_PASSWORD=SISTCI
+      - PGDATA=/data/postgres
+    volumes:
+      - ./v_db_sistci:/data/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - db_sistci
+    restart: unless-stopped
+
+networks:
+  ms_sistci:
+    driver: bridge
+  db_sistci:
+    driver: bridge
